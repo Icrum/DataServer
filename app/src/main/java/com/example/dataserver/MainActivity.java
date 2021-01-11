@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -25,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-    Button mLogoutBtn;
 
     ListView myListView;
 
@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar= findViewById(R.id.toolbar);
+        toolbar.setTitle("Sensors");
         setSupportActionBar(toolbar);
 
         final ArrayAdapter<String> myArrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, myArrayList);
@@ -78,7 +79,15 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
+        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String currentSensor=parent.getItemAtPosition(position).toString();
+                Intent SensorIntent=new Intent(getApplicationContext(),StatsActivity.class);
+                SensorIntent.putExtra("Sensor",currentSensor);
+                startActivity(SensorIntent);
+            }
+        });
 
     }
 
