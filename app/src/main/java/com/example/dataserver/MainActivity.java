@@ -2,6 +2,8 @@ package com.example.dataserver;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.provider.ContactsContract;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.content.Intent;
@@ -112,11 +114,11 @@ public class MainActivity extends AppCompatActivity {
             */
                 return true;
             case R.id.profile:
-                //addfav (heart icon) was clicked, Insert your after click code here.
+                profile();
                 return true;
 
             case R.id.about:
-                //addfav (heart icon) was clicked, Insert your after click code here.
+                about();
                 return true;
 
             case R.id.logout:
@@ -134,7 +136,15 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
+    public void about (){
+        startActivity(new Intent(getApplicationContext(),AboutActivity.class));
+        finish();
+    }
 
+    public void profile (){
+        startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
+        finish();
+    }
 
 
 }
