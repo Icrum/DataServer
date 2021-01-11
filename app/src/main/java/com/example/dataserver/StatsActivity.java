@@ -44,23 +44,28 @@ public class StatsActivity extends AppCompatActivity {
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String str = dataSnapshot.child(currentSensor).getValue().toString();
+                String str = dataSnapshot.child(currentSensor).getValue().toString() + ",";
                 str = str.replace(" ", "");
                 str = str.replace("}", "");
                 str = str.replace("{", "");
                 str = str.replace("-", "");
-                String currentvalue = str.substring(str.length() - 10);
-                currentvalue = currentvalue.substring(currentvalue.indexOf("=") + 1, currentvalue.length());
+                String currentvalue = str.substring(str.length() - 26);
+                currentvalue = currentvalue.substring(currentvalue.indexOf("=") + 1, str.indexOf(","));
                 mCurrentValue.setText("Current Value: " + currentvalue);
 
                 String value;
+                str = str.substring(str.length() - 312);
+                if (str.indexOf("=") > str.indexOf(","))
+                    str = str.substring(str.indexOf(",") + 1);
                 String[] temps = new String[12];
                 for(int i = 0; i <= temps.length - 1; i++)
                 {
-                    value = str.substring(str.indexOf("=") + 1, str.indexOf(",") - 1);
-                    temps[i] = value;
-                    str = str.substring(str.indexOf(",") + 1);
-
+                    if (!str.isEmpty())
+                    {
+                        value = str.substring(str.indexOf("=") + 1, str.indexOf(","));
+                        temps[i] = value;
+                        str = str.substring(str.indexOf(",") + 1);
+                    }
                 }
 
                 temps[11] = currentvalue;
