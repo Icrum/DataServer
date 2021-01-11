@@ -16,6 +16,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
 
@@ -23,7 +26,7 @@ import java.util.ArrayList;
 public class StatsActivity extends AppCompatActivity {
     private String currentSensor;
     DatabaseReference mRef;
-    int i = 0;
+    private LineGraphSeries<DataPoint> series1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,12 +70,29 @@ public class StatsActivity extends AppCompatActivity {
                         str = str.substring(str.indexOf(",") + 1);
                     }
                 }
-
                 temps[11] = currentvalue;
-                /*for (String strArray : temps)
+
+                double x, y;
+                GraphView graph = (GraphView) findViewById(R.id.graph);
+
+                graph.getViewport().setXAxisBoundsManual(true);
+                graph.getViewport().setMinX(0);
+                graph.getViewport().setMaxX(6);
+
+                //enable scrolling
+                graph.getViewport().setScrollable(true);
+                //disable scaling
+                graph.getViewport().setScalable(false);
+                graph.getViewport().setScalableY(false);
+
+                series1 = new LineGraphSeries<DataPoint>();
+                for (int i = 0; i < temps.length; i++)
                 {
-                    mCurrentValue.setText(mCurrentValue.getText() + strArray);
-                }*/
+                    x = i;
+                    y = Double.parseDouble(temps[i]);
+                    series1.appendData(new DataPoint(x, y), true, 12);
+                }
+                graph.addSeries(series1);
             }
 
             @Override
