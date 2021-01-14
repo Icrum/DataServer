@@ -23,6 +23,7 @@ import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -33,6 +34,8 @@ public class StatsActivity extends AppCompatActivity {
     private String currentSensor;
     DatabaseReference mRef;
     private LineGraphSeries<DataPoint> series1;
+
+    List<SensorValue> sensorValueList = new ArrayList<>(); // model
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,22 +67,36 @@ public class StatsActivity extends AppCompatActivity {
         graph.getViewport().setScalableY(false);
 
 
-        mRef.orderByKey().limitToLast(12).addValueEventListener(new ValueEventListener() {
+        mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                HashMap<String, String> valueHash = (HashMap<String, String>) dataSnapshot.getValue();
 
-                Iterator it = valueHash.entrySet().iterator();
+                Iterator it = dataSnapshot.getChildren().iterator();
 
-                List<SensorValue> sensorValueList = new ArrayList<>();
+
+                sensorValueList.clear();
 
                 while(it.hasNext()){
-                    SensorValue sv = new SensorValue((Map.Entry<String, String>) it.next());
+                    SensorValue sv = new SensorValue((DataSnapshot) it.next());
                     sensorValueList.add(sv);
 
                 }
 
-                Log.d("StatsActivity", valueHash.toString() );
+                sensorValueList.sort(new Comparator<SensorValue>() {
+                    @Override
+                    public int compare(SensorValue o1, SensorValue o2) {
+                        if (o1.getDate().after(o2.getDate())) {
+                            return 1;
+
+                        } else {
+                            return 0;
+                        }
+                    }
+                });
+
+                sensorValueList = sensorValueList.subList(sensorValueList.size()-12, sensorValueList.size());
+
+
 
                 /*
 

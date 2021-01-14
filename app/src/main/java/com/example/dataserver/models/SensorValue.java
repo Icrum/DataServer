@@ -1,7 +1,10 @@
 package com.example.dataserver.models;
 
+import com.google.firebase.database.DataSnapshot;
+
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 //
@@ -47,6 +50,24 @@ public class SensorValue {
         this.id = entry.getKey();
         this.value = Float.parseFloat(entry.getValue());
         this.date = new Date();
+    }
+
+    public SensorValue(DataSnapshot ds) {
+        this.id = ds.getKey();
+        this.value = Float.parseFloat((String)ds.child("Value").getValue());
+        Iterator it = ds.getChildren().iterator();
+
+
+        while(it.hasNext()){
+            DataSnapshot d = (DataSnapshot) it.next();
+
+            String key = d.getKey();
+            if(key.compareTo( "Value")!=0) {
+                Object  dateObj = d.getValue();
+                this.date =  new Date((Long)dateObj);
+            }
+
+        }
     }
 
 
