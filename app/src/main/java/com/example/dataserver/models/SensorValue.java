@@ -7,9 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-//
-// Created by lourencogomes on 1/12/21.
-//
+
 public class SensorValue {
 
     String id;

@@ -22,8 +22,10 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -32,9 +34,9 @@ import java.util.Map;
 
 public class StatsActivity extends AppCompatActivity {
     private String currentSensor;
-    DatabaseReference mRef;
     private LineGraphSeries<DataPoint> series1;
 
+    DatabaseReference mRef;
     List<SensorValue> sensorValueList = new ArrayList<>(); // model
 
     @Override
@@ -56,15 +58,14 @@ public class StatsActivity extends AppCompatActivity {
 
         final GraphView graph = (GraphView) findViewById(R.id.graph);
 
-        graph.getViewport().setXAxisBoundsManual(true);
-        graph.getViewport().setMinX(0);
-        graph.getViewport().setMaxX(6);
-
-        //enable scrolling
-        graph.getViewport().setScrollable(true);
-        //disable scaling
+        // activate horizontal zooming and scrolling
         graph.getViewport().setScalable(false);
+        // activate horizontal scrolling
+        graph.getViewport().setScrollable(true);
+        // activate horizontal and vertical zooming and scrolling
         graph.getViewport().setScalableY(false);
+        // activate vertical scrolling
+        graph.getViewport().setScrollableY(false);
 
 
         mRef.addValueEventListener(new ValueEventListener() {
@@ -72,14 +73,11 @@ public class StatsActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 Iterator it = dataSnapshot.getChildren().iterator();
-
-
                 sensorValueList.clear();
 
                 while(it.hasNext()){
                     SensorValue sv = new SensorValue((DataSnapshot) it.next());
                     sensorValueList.add(sv);
-
                 }
 
                 sensorValueList.sort(new Comparator<SensorValue>() {
@@ -87,61 +85,33 @@ public class StatsActivity extends AppCompatActivity {
                     public int compare(SensorValue o1, SensorValue o2) {
                         if (o1.getDate().after(o2.getDate())) {
                             return 1;
-
                         } else {
                             return 0;
                         }
                     }
                 });
 
-                sensorValueList = sensorValueList.subList(sensorValueList.size()-12, sensorValueList.size());
-
-
-
-                /*
-
-                String str = dataSnapshot.child(currentSensor).getValue().toString() + ",";
-
-
-                str = str.replace(" ", "");
-                str = str.replace("}", "");
-                str = str.replace("{", "");
-                str = str.replace("-", "");
-                String currentvalue = str.substring(str.length() - 26);
-                currentvalue = currentvalue.substring(currentvalue.indexOf("=") + 1, str.indexOf(","));
-                mCurrentValue.setText("Current Value: " + currentvalue);
-
-                String value;
-                str = str.substring(str.length() - 312);
-                if (str.indexOf("=") > str.indexOf(","))
-                    str = str.substring(str.indexOf(",") + 1);
-                String[] temps = new String[12];
-                for(int i = 0; i <= temps.length - 1; i++)
-                {
-                    if (!str.isEmpty())
-                    {
-                        value = str.substring(str.indexOf("=") + 1, str.indexOf(","));
-                        temps[i] = value;
-                        str = str.substring(str.indexOf(",") + 1);
-                    }
-                }
-                temps[11] = currentvalue;
-*/
-
-
-
+                sensorValueList = sensorValueList.subList(sensorValueList.size()-14, sensorValueList.size());
                 mCurrentValue.setText("Current Value: " + sensorValueList.get(sensorValueList.size()-1).getValue());
-                double x, y;
 
+                Date x;
+                SimpleDateFormat sdf = new SimpleDateFormat("HH");
+                SimpleDateFormat sdf2 = new SimpleDateFormat("mm");
+                double y, x1, x2;
 
                 series1 = new LineGraphSeries<DataPoint>();
                 for (int i = 0; i < sensorValueList.size(); i++)
                 {
-                    x = i;
+                    x = sensorValueList.get(i).getDate();
                     y = sensorValueList.get(i).getValue();
-                    series1.appendData(new DataPoint(x, y), true, sensorValueList.size());
+                    x1 = Double.parseDouble(sdf.format(x.getTime()));
+                    x2 = Double.parseDouble(sdf2.format(x.getTime()));
+
+                    series1.appendData(new DataPoint(x1+(x2*0.016), y), true, sensorValueList.size());
                 }
+
                 graph.addSeries(series1);
+
             }
 
             @Override

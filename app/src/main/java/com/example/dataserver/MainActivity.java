@@ -44,7 +44,8 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitle("Sensors");
         setSupportActionBar(toolbar);
 
-        final ArrayAdapter<String> myArrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, myArrayList);
+        final ArrayAdapter<String> myArrayAdapter = new ArrayAdapter<String>(MainActivity.this,
+                android.R.layout.simple_list_item_1, myArrayList);
 
         myListView = (ListView) findViewById(R.id.listview1);
         myListView.setAdapter(myArrayAdapter);
@@ -54,8 +55,6 @@ public class MainActivity extends AppCompatActivity {
         mRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                //String value = dataSnapshot.getValue().toString();
-                //myArrayList.add(value);
                 String key = dataSnapshot.getKey();
                 myArrayList.add(key);
                 myArrayAdapter.notifyDataSetChanged();

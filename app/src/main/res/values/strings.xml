@@ -1,4 +1,14 @@
 <resources>
     <string name="app_name">DataServer</string>
     <string name="multisensor_app">Multisensor App</string>
+    <string name="version">Multisensor App\nVersion 1.0 January 2021\nFor assistance, please contact:\na13289@alunos.ipca.pt</string>
+    <string name="welcome">Welcome to Multisensor App!\n\nThis app was created by Cláudia Pereira, from IPCA.\nWith this app you can see the data, plotted into a chart, from multiple sensors.</string>
+    <string name="login">Login</string>
+    <string name="new_here_create_your_account_here">New here? Create your account here!</string>
+    <string name="email">Email</string>
+    <string name="name">Name</string>
+    <string name="create_new_account">Create New Account</string>
+    <string name="password">Password</string>
+    <string name="register">Register</string>
+    <string name="already_registered_login_here">Already Registered? Login Here!</string>
 </resources>
