@@ -91,13 +91,14 @@ public class StatsActivity extends AppCompatActivity {
                     }
                 });
 
-                sensorValueList = sensorValueList.subList(sensorValueList.size()-14, sensorValueList.size());
+                sensorValueList = sensorValueList.subList(sensorValueList.size()-12, sensorValueList.size());
                 mCurrentValue.setText("Current Value: " + sensorValueList.get(sensorValueList.size()-1).getValue());
 
                 Date x;
                 SimpleDateFormat sdf = new SimpleDateFormat("HH");
                 SimpleDateFormat sdf2 = new SimpleDateFormat("mm");
                 double y, x1, x2;
+                //String[] time= new String[12];
 
                 series1 = new LineGraphSeries<DataPoint>();
                 for (int i = 0; i < sensorValueList.size(); i++)
@@ -107,9 +108,11 @@ public class StatsActivity extends AppCompatActivity {
                     x1 = Double.parseDouble(sdf.format(x.getTime()));
                     x2 = Double.parseDouble(sdf2.format(x.getTime()));
 
-                    series1.appendData(new DataPoint(x1+(x2*0.016), y), true, sensorValueList.size());
-                }
+                    series1.appendData(new DataPoint(x1+(x2*0.016), y),
+                            true,
+                            sensorValueList.size()+2);
 
+                }
                 graph.addSeries(series1);
 
             }
@@ -121,3 +124,8 @@ public class StatsActivity extends AppCompatActivity {
         });
     }
 }
+//String[] time= new String[12];
+
+/*for (int j = 0; j<=time.length; j++){
+    time[j]= String.valueOf(x1 = Double.parseDouble(sdf.format(x.getTime())))+":"+String.valueOf(Double.parseDouble(sdf2.format(x.getTime())));
+ }*/

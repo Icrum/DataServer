@@ -55,10 +55,8 @@ public class SensorValue {
         this.value = Float.parseFloat((String)ds.child("Value").getValue());
         Iterator it = ds.getChildren().iterator();
 
-
         while(it.hasNext()){
             DataSnapshot d = (DataSnapshot) it.next();
-
             String key = d.getKey();
             if(key.compareTo( "Value")!=0) {
                 Object  dateObj = d.getValue();

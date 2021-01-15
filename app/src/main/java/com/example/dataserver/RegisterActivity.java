@@ -52,12 +52,12 @@ public class RegisterActivity extends AppCompatActivity {
         mRegisterBtn.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String email=mEmail.getText().toString().trim();
+                final String email=mEmail.getText().toString();
                 String password=mPassword.getText().toString().trim();
                 final String fullname=mFullName.getText().toString();
 
                 if(TextUtils.isEmpty(email)){
-                    mEmail.setError("Email is Required.");
+                    mEmail.setError("Email is required.");
                     return;
                 }
 
@@ -77,7 +77,9 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            Toast.makeText(RegisterActivity.this, "User created.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this,
+                                    "User created.",
+                                    Toast.LENGTH_SHORT).show();
                             userID=fAuth.getCurrentUser().getUid();
                             DocumentReference documentReference=fstore.collection("users").document(userID);
                             Map<String,Object> user=new HashMap<>();
@@ -96,7 +98,9 @@ public class RegisterActivity extends AppCompatActivity {
                             });
                             startActivity(new Intent(getApplicationContext(),MainActivity.class));
                         }else{
-                            Toast.makeText(RegisterActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this,
+                                    "Error: " + task.getException().getMessage(),
+                                    Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.VISIBLE);
                         }
 
